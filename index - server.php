@@ -3,8 +3,6 @@ session_start();
 //for server edition change  -> // $redirect_uri + If we get result, we print user's account detail
 // URL to set URL permission
 //https://console.developers.google.com/apis/credentials?project=my-projecttrue-1528741703164&folder&organizationId
-
-//works on Local, crashes on ZZZ
 ?>
 <!DOCTYPE html>
 <html>
@@ -18,7 +16,7 @@ session_start();
 <?php
 $client_id = '455759570869-sfbuti1gc4np3556sua50rp2dpumai16.apps.googleusercontent.com'; // Client ID
 $client_secret = 'YDivYuAd3hOQF4o9RBNj9WXE'; // Client secret
-$redirect_uri = 'http://localhost/google-auth/index.php'; // Redirect URI  //my-> must be with final page id {index.html} or it crashes
+$redirect_uri = 'http://waze.zzz.com.ua/oauth_api/index.php'; // Redirect URI  //my-> must be with final page id {index.html} or it crashes
 
 $url = 'https://accounts.google.com/o/oauth2/auth';
 
@@ -66,7 +64,8 @@ if (isset($_GET['code'])) {
     );
 
     $url = 'https://accounts.google.com/o/oauth2/token';
-
+try{
+	
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_POST, 1);
@@ -74,8 +73,16 @@ if (isset($_GET['code'])) {
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
     $result = curl_exec($curl);
+	echo "Res ". $result;
     curl_close($curl);
+	
+	
     $tokenInfo = json_decode($result, true);
+	//$tokenInfo = json_decode(file_get_contents('https://accounts.google.com/o/oauth2/token' . '?' . urldecode(http_build_query($params))), true);
+	echo "<br>Tokens ". $tokenInfo;
+} catch(Exception $e) {
+  echo 'Message: ' .$e->getMessage();
+}
 
     if (isset($tokenInfo['access_token'])) {
         $params['access_token'] = $tokenInfo['access_token'];
@@ -99,8 +106,8 @@ if (isset($_GET['code'])) {
        }
 		//-----------------
 
-        //$userInfo = json_decode(file_get_contents('https://www.googleapis.com/oauth2/v1/userinfo' . '?' . urldecode(http_build_query($params))), true);
-		  $userInfo = json_decode(curl_get_contents('https://www.googleapis.com/oauth2/v1/userinfo' . '?' . urldecode(http_build_query($params))), true);
+        $userInfo = json_decode(file_get_contents('https://www.googleapis.com/oauth2/v1/userinfo' . '?' . urldecode(http_build_query($params))), true);
+		  //$userInfo = json_decode(curl_get_contents('https://www.googleapis.com/oauth2/v1/userinfo' . '?' . urldecode(http_build_query($params))), true);
 
         if (isset($userInfo['id'])) {
             $userInfo = $userInfo;
@@ -112,12 +119,12 @@ if (isset($_GET['code'])) {
 			//echo "true <br>";
 			//var_dump( $userInfo ). "<br>";
         }
-    }
-}
+    } else {echo "<br>NO access token<br>";}
+}  else {echo "<br>NO code<br>";}
 
   // If we get result, we print user's account detail
   if ($result) {
-    echo "<br><a href='https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost/google-auth/index.php?status=OFF'><input type='button' id='' value='Log out'/></a><br><br>";
+    echo "<br><a href='https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://waze.zzz.com.ua/oauth_api/index.php?status=OFF'><input type='button' id='' value='Log out'/></a><br><br>";
 
     echo "Social user ID : " . $userInfo['id'] . '<br />';
     echo "User name: " . $userInfo['name'] . '<br />';
@@ -130,7 +137,7 @@ if (isset($_GET['code'])) {
   }
   // END If we get result, we print user's account detail
 
-  
+   if (!$result) {echo "<br>NO RESULT<br>";}
   
   
   
@@ -164,7 +171,7 @@ if (isset($_GET['code'])) {
 	  echo "<a href='https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost/google-auth/index.php?&status=OFF'><input type='button' id='' value='Log out if{}else-does not work'/></a><br><br>";
       echo "<br>Sure Wanna log out " . $_SESSION['user'][name]. "?";
   }  
-*/
+ */
   
   
   
@@ -172,7 +179,7 @@ if (isset($_GET['code'])) {
   
   
   
-  
+  echo "<p>pp</p>";
  
 
 ?>
