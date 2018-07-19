@@ -1,8 +1,8 @@
 <?php
 //Credentials for Google OAUTH API
 
-$client_id = '455759570869-sfbuti1gc4np3556sua50rp2dpumai16.apps.googleusercontent.com'; // Client ID
-$client_secret = 'YDivYuAd3hOQF4o9RBNj9WXE'; // Client secret
+$client_id = '4557ent.com'; // Client ID
+$client_secret = 'YDivXE'; // Client secret
 
 //THE URL to redirect after Google authorization
 $redirect_uri = 'http://localhost/google-oauth/index.php'; // Redirect URI  //my-> must be with final page id {index.html} or it crashes(if u specify it with final page in console)
