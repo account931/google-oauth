@@ -1,9 +1,25 @@
 
+
+	.log-in { 
+	    width:30%; background:grey;padding:20px;margin: 0 auto;}
+		
+		
+	.imgStart{width:30%;margin-top:32px;}
+		
+		
+		
+		
 	/* ---------------------------------------- Mobile */
     @media screen and (max-width: 480px) { 
+	
+	.log-in { width:90%; }
+	.imgStart{width:70%;margin-top:32px;}
 	    
     }
 	/* ------------------------------------ END Mobile */
+	
+	
+
 
 	a {
        color: white;

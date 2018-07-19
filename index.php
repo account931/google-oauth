@@ -23,6 +23,8 @@ error_reporting(0);
 	
 	 <!--Favicon-->
      <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+	 
+	 <meta name="viewport" content="width=device-width"/> <!-- For Responsive activation-->
 </head>
 <body>
 
@@ -36,8 +38,8 @@ include 'Classes/autoload.php';//uses autoload instead of manual includin each c
 
 //Bellow credentials are moved  to {oauth_credentials/credentials.php}
 /* 
-$client_id = '4557tent.com'; // Client ID
-$client_secret = 'YXE'; // Client secret
+$client_id = '455759570869-sfbuti1gc4np3556sua50rp2dpumai16.apps.googleusercontent.com'; // Client ID
+$client_secret = 'YDivYuAd3hOQF4o9RBNj9WXE'; // Client secret
 $redirect_uri = 'http://localhost/google-oauth/index.php'; // Redirect URI  //my-> must be with final page id {index.html} or it crashes
 */
 
@@ -213,10 +215,10 @@ if (isset($_GET['code'])) {
   //if  NO session exists, display LOG IN button SIGN BAnner
    if ((!$_GET)|| ($_GET['status']=="OFF")) { // if (!isset($_SESSION['user'])){
       // Link to Google OAUTH URL
-      echo "<br><br><center><div class='myShadow' style='width:30%; background:grey;padding:20px;margin: 0 auto;'>";
+      echo "<br><br><center><div class='myShadow log-in'>";
       echo $link = '<p><a href="' . $url . '?' . urldecode(http_build_query($params)) . '">Go oAuth 2.0 via Google</a></p>';
       echo "</div>";
-	  echo "<img src='images/g1.jpg' alt='' style='width:30%;margin-top:32px;'/></center>";
+	  echo "<img src='images/g1.jpg' class='imgStart' alt='img' /></center>";
   } 
   // END UNLOGGED USER SECTION-------------------------------
   
