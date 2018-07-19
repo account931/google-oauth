@@ -4,7 +4,11 @@ session_start();
 // URL to set URL permission
 //https://console.developers.google.com/apis/credentials?project=my-projecttrue-1528741703164&folder&organizationId
 
-//works on Local, crashes on ZZZ
+
+// Turn off error reporting
+error_reporting(0);
+
+//works on Local, crashed on ZZZ, was transferred to example2.esy.es as ZZZ doesnot support CURL for free
 ?>
 <!DOCTYPE html>
 <html>
@@ -12,16 +16,35 @@ session_start();
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
     <title>OAUTH 2</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>        <!--Bootstrap-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"><!--Bootstrap-->
+	<link rel="stylesheet" type="text/css" media="all" href="css/myOauth.css">
+	
+	 <!--Favicon-->
+     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 </head>
 <body>
 
 <?php
-$client_id = '4557595706556-sfbuti1gc4np355content.com'; // Client ID
-$client_secret = 'YDivYu'; // Client secret
-$redirect_uri = 'http://localhost/google-auth/index.php'; // Redirect URI  //my-> must be with final page id {index.html} or it crashes
+//include Google credentails in separate file to easily manipulate with localhost/Hostinger Server settings
+include 'oauth_credentials/credentials.php';
+
+include 'Classes/autoload.php';//uses autoload instead of manual includin each class-> Error if it is included in 2 files=only1 is accepted
+
+
+
+//Bellow credentials are moved  to {oauth_credentials/credentials.php}
+/* 
+$client_id = '455759570869-sfbuti1gc4np3556sua50rp2dpumai16.apps.googleusercontent.com'; // Client ID
+$client_secret = 'YDivYuAd3hOQF4o9RBNj9WXE'; // Client secret
+$redirect_uri = 'http://localhost/google-oauth/index.php'; // Redirect URI  //my-> must be with final page id {index.html} or it crashes
+*/
 
 $url = 'https://accounts.google.com/o/oauth2/auth';
 
+
+//setting array with params
 $params = array(
     'redirect_uri'  => $redirect_uri,
     'response_type' => 'code',
@@ -53,7 +76,7 @@ $params = array(
   
   
   
-
+//if u clicked the link to authorize and Google returned your url with attached Google code
 if (isset($_GET['code'])) {
     $result = false;
 
@@ -77,6 +100,9 @@ if (isset($_GET['code'])) {
     curl_close($curl);
     $tokenInfo = json_decode($result, true);
 
+	
+	
+	
     if (isset($tokenInfo['access_token'])) {
         $params['access_token'] = $tokenInfo['access_token'];
 		
@@ -115,56 +141,86 @@ if (isset($_GET['code'])) {
     }
 }
 
-  // If we get result, we print user's account detail
-  if ($result) {
-    echo "<br><a href='https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost/google-auth/index.php?status=OFF'><input type='button' id='' value='Log out'/></a><br><br>";
+// END OAUTH API SECTION----------------------------------------------------------------------------------------------------
 
-    echo "Social user ID : " . $userInfo['id'] . '<br />';
-    echo "User name: " . $userInfo['name'] . '<br />';
-    echo "Email: " . $userInfo['email'] . '<br />';
-    echo "User's profiel link: " . $userInfo['link'] . '<br />';
-    echo "Gender: " . $userInfo['gender'] . '<br />';
-	echo "Language: " . $userInfo['locale'] . '<br />';
-    echo '<img src="' . $userInfo['picture'] . '" />'; echo "<br />";
-	
-  }
-  // END If we get result, we print user's account detail
 
-  
-  
-  
-  
-     // if user logout it was redirected with $_GET['status']?status=OFF
-   if (isset($_GET['status'])) {
-	   unset ($_SESSION['user']);
-	  //header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . $location);
-	  session_destroy();
-	  //header('Location: '.$_SERVER['PHP_SELF']);
-      //die;
-  }
-  
-  
-  
-  
-  
-  
-  //if session exists
-   if ((!$_GET)|| ($_GET['status']=="OFF")){ // if (!isset($_SESSION['user'])){
-      // Link to Google OAUTH URL
-      echo "<br><br><div style='width:30%; background:grey;padding:20px;margin: 0 auto;'><center>";
-      echo $link = '<p><a href="' . $url . '?' . urldecode(http_build_query($params)) . '">Go oAuth 2.0 via Google</a></p>';
-      echo "</center></div>";
-  } 
-  
-  
 
-  //comment so far
-  /*
+
+
+
+
+
+
+
+
+// DISPLAY SECTION----------------------------------------------------------------------------------------------------
+   
+  
+ // LOGGED USER SECTION------------------------------
+ //LOG-OUT button (redirects after Google log-out to php_scripts/log_out.php), only appears/visible if Session is set
+  //DispalyUserInfo::showLogOutButton();
+  
+  
   if (isset($_SESSION['user'])){
-	  echo "<a href='https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost/google-auth/index.php?&status=OFF'><input type='button' id='' value='Log out if{}else-does not work'/></a><br><br>";
-      echo "<br>Sure Wanna log out " . $_SESSION['user'][name]. "?";
+	  echo "<div class='col-md-6 col-xs-6'>";
+	  echo "<br> &nbsp;Hello, " . $_SESSION['user']['name']. "!";
+	  echo "<br><a href=" . $link_to_back_after_log_out . "><input type='button' id='' class='btn btn-large' value='Log out, " . $_SESSION['user']['name'] . "'?/></a><br><br>";
+      
   }  
-*/
+  
+  //END LOG-OUT button (redirects after Google log-out to php_scripts/log_out.php), only appears/visible if Session is set
+
+
+  
+  
+
+   //USER"S PROFILE
+  // If we get result, we print user's account fields, instead of array $userInfo, we use Session $_SESSION['user'], so data won't disappear on reload
+  //DispalyUserInfo::showUserInfo();
+  
+  if ($result) {
+	//log out button (redirects after Google log-out to php_scripts/log_out.php)
+    //echo "<br><a href='https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost/google-auth/php_scripts/log_out.php?status=OFF'><input type='button' id='' value='Log out'/></a><br><br>";
+
+    echo "Social user ID : " . $_SESSION['user']['id'] . '<br />';             // $userInfo['id'] 
+    echo "User name: " . $_SESSION['user']['name'] . '<br />';                 // $userInfo['name'] 
+    echo "Email: " . $_SESSION['user']['email'] . '<br />';                    // $userInfo['email'] 
+    echo "User's profiel link: " . $_SESSION['user']['link'] . '<br />';       // $userInfo['link']
+    echo "Gender: " . $_SESSION['user']['gender'] . '<br />';                  // $userInfo['gender']
+	echo "Language: " . $_SESSION['user']['locale'] . '<br />';                // $userInfo['locale'] 
+    echo '<img src="' . $_SESSION['user']['picture'] . '" />'; echo "<br />";  // $userInfo['picture'] 
+	
+  
+  // END If we get result, we print user's account detail
+ //END USER"S PROFILE
+  
+  echo "</div>";
+  
+  //right div with img
+  echo  "<div class='col-md-6 col-xs-6'>";
+      echo "<img src='images/g5.jpg' alt='' align='right' style='width:40%;margin-right:35%;margin-top:85px;'/>";
+	  
+  echo "</div>";
+  }
+  
+  // END LOGGED USER SECTION------------------------------
+  
+  
+  
+  
+  
+  // UNLOGGED USER SECTION-------------------------------
+  //if  NO session exists, display LOG IN button SIGN BAnner
+   if ((!$_GET)|| ($_GET['status']=="OFF")) { // if (!isset($_SESSION['user'])){
+      // Link to Google OAUTH URL
+      echo "<br><br><center><div class='myShadow' style='width:30%; background:grey;padding:20px;margin: 0 auto;'>";
+      echo $link = '<p><a href="' . $url . '?' . urldecode(http_build_query($params)) . '">Go oAuth 2.0 via Google</a></p>';
+      echo "</div>";
+	  echo "<img src='images/g1.jpg' alt='' style='width:30%;margin-top:32px;'/></center>";
+  } 
+  // END UNLOGGED USER SECTION-------------------------------
+  
+ 
   
   
   

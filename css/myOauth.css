@@ -1,0 +1,14 @@
+
+	/* ---------------------------------------- Mobile */
+    @media screen and (max-width: 480px) { 
+	    
+    }
+	/* ------------------------------------ END Mobile */
+
+	a {
+       color: white;
+    }
+	  
+	.myShadow{
+       box-shadow: 10px 10px 5px grey;
+    }
