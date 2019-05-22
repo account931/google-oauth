@@ -9,7 +9,7 @@ How it works
 4. If $tokenInfo['access_token'] is returned, we add access_token to array $params[], then we use CURL to address {https://www.googleapis.com/oauth2/v1/userinfo} + updated $params[](that now includes access_token $_GET['code'] + Client ID, secret, redirection URI) 
 
 ------------------------------------
-REDIRECT URLs to your page(from credentials)  must be added to console in 2 sections. Section 2->(https://console.developers.google.com/apis/credentials/oauthclient/455*******-********50rp2dpumai16.apps.googleusercontent.com?project=455*******9)
+REDIRECT URLs to your page(from /oauth_credentials/)  must be added to console in 2 sections. Section 2->(https://console.developers.google.com/apis/credentials/oauthclient/455*******-********50rp2dpumai16.apps.googleusercontent.com?project=455*******9)
 Redirect URL must ends with  http://*********/index.php
 ------------------------------------
 
